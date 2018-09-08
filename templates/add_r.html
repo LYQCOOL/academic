@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}
+    sharing relationship
+{% endblock %}
+{% block style %}
+    .active{
+    color: #5bc0de;font-size: 25px;
+    }
+{% endblock %}
+{% block content %}
+<center><h1 style="color: #5bc0de;font-weight: 600;">sharing relationship</h1></center>
+<form action="/add_relation/" method="post" class="active">
+{% csrf_token %}
+<div style="margin-top: 10px;" class="active;">
+<div style="margin-left:50px;">
+    <div>
+    <label>theorme name 1：</label></div>
+    <select  class="t1" name="t1" style="border: double dodgerblue;width:95%;color: black;font-size: 15px;height: 40px;">
+        {% for row in obj %}
+        <option value="{{ row.id }}">{{ row.name }}</option>
+        {% endfor %}
+    </select>
+{#    <input type="text" placeholder="请输入定理名" style="border: double dodgerblue;width:95%;color: black;font-size: 15px;height: 40px;" name="t_name1" class="title1">#}
+</div>
+<div style="margin-left:50px;">
+    <div>
+    <label>theorem name 2：</label></div>
+    <select class="t2" name="t2" style="border: double dodgerblue;width:95%;color: black;font-size: 15px;height: 40px;">
+        {% for row in obj %}
+        <option value="{{ row.id }}">{{ row.name }}</option>
+        {% endfor %}
+    </select>
+{#    <input type="text" placeholder="请输入定理名" style="border: double dodgerblue;width:95%;color: black;font-size: 15px;height: 40px;" name="t_name2" class="title2">#}
+</div>
+    <div style="margin-left:50px;">
+    <div>
+    <label>relationship：</label></div>
+        <select  name="t_relation" style="border: double dodgerblue;width:95%;color: black;font-size: 15px;height: 40px;">
+            {% for row in nexus %}
+               <option value="{{ row.id }}">{{ row.r_name }}</option>
+        {% endfor %}
+        </select></div>
+    <div style="margin-left:50px;"><label>Description of relationship：</label></div>
+<div>
+         <textarea style="margin-left:50px;width:91.5%;height: 200px;border: double dodgerblue;color: black;font-size: 15px;" placeholder="please input Description of relationship " name="t_relation_exp" class="t_relation"></textarea>
+{#    <input type="text" placeholder="请输入定理关系" style="border: double dodgerblue;width:95%;color: black;font-size: 15px;height: 40px;" name="relation" class="relation">#}
+</div>
+<div style="margin-left:50px;">
+    <div>
+    <label>inference：</label></div>
+    <input type="text" placeholder="Please input the inference" style="border: double dodgerblue;width:95%;color: black;font-size: 15px;height: 40px;" name="t_ref" class="title">
+</div>
+<div style="margin-left: 1085px;margin-top: 20px;">
+    <input style="background-color: #FFEEC2;" type="submit" value="Submit" class="tijiao">&emsp;&emsp;&nbsp;&nbsp;
+     <input style="background-color: #FFEEC2;" type="button" value="Cancel" class="cancel">
+</div>
+</div>
+</form>
+{% endblock %}
+{% block script %}
+<script>
+$('.cancel').click(function () {
+$('.t_relation').val('');
+
+
+})
+</script>
+    {{ error|safe }}
+{% endblock %}

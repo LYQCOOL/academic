@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block style %}
+.active{
+
+
+    color: #5bc0de
+    }
+
+{% endblock %}
+
+
+{% block content %}
+    <center class="active">
+    <h1 class="active" style="font-size: 50px;">信息管理：</h1>
+        <div>
+                   <button class="infs" style="font-size: 20px;background-color:#FFEEC2;color: #5bc0de;">基本信息</button>
+                    <button class="pwdw"  style="font-size: 20px;background-color: #d43f3a;color: #5bc0de;">密码管理</button>
+
+
+        </div>
+        <form action="/pwd/" method="post" class="pwd">
+            {% csrf_token %}
+
+        <div>
+
+        <label style="margin-left: -120px;">原密码：</label>
+    </div>
+    <div>
+
+        <input type="password" name="o_pwd" placeholder="请输入原密码" >
+    </div>
+              <div>
+
+        <label style="margin-left: -120px;">新密码：</label>
+    </div>
+    <div>
+
+        <input type="password" name="new1" placeholder="请输入新密码" >
+    </div>
+
+    <div>
+
+        <label style="margin-left: -60px;">再次输入新密码：</label>
+    </div>
+    <div>
+
+        <input type="password" name="new2" placeholder="请再次输入新密码" >
+    </div>
+
+            <div>{{ error }}</div>
+    <div>
+        <input class="change" type="submit" style="background-color: #FFEEC2;color: #5bc0de; margin-top: 20px; " value="确认修改">
+
+    </div>
+              </form>
+    </center>
+
+
+
+
+
+
+{% endblock %}
+{% block script %}
+    <script>
+$('.infs').click(function(){
+    location.href='/information/'
+    });
+    $('.pwdw').click(function(){
+    location.href='/pwd/'
+    })
+
+</script>
+{% endblock %}

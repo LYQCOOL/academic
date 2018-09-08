@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block title %}
+    My account
+{% endblock %}
+{% block style%}
+     .active{
+    color:#5bc0de;
+    font-size:20px;}
+
+
+ .left-01 {
+           float: left;
+           background-color:yellow;
+           width: 200px;
+           height: 200px;
+       }
+       .right-01 {
+           float: right;
+           background-color: wheat;
+           width: 200px;
+           height: 200px;
+       }
+       .middle-01 {
+           margin: 20px 200px 0 150px;
+           background-color: #fff9ca;
+           height: 200px;
+       }
+{% endblock %}
+{% block content %}
+
+<p>{{  u.nickname}}</p>
+    <p>{{  u.description}}</p>
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#descriptionModal">
+	editing specification
+</button>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="descriptionModalLabel">
+					editing specification
+				</h4>
+			</div>
+			<div class="modal-body">
+                <input type="text" name="edit_description" id="edit_description"/>
+			</div>
+			<div class="modal-footer">
+				<button id="post_description" type="button" class="btn btn-default" class="btn btn-primary" data-dismiss="modal">提交更改
+				</button>
+
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#nicknameModal">
+	Edit nickname
+</button>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="nicknameModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					Edit nickname
+				</h4>
+			</div>
+			<div class="modal-body">
+                <input type="text" name="edit_nickname" id="edit_nickname"/>
+			</div>
+			<div class="modal-footer">
+				<button id="post_nickname" type="button" class="btn btn-default" class="btn btn-primary" data-dismiss="modal">提交更改
+				</button>
+
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+{% if obj %}
+    {% for row in obj %}
+
+    <div>
+    <div class="left-01">
+
+         <p style="margin-top: 40px;"><label class="active">Theorem name:</label>{{ row.name }}</p>
+    </div>
+        <div class="right-01">
+  <p style="margin-top:40px;margin-left: 20px;"><label class="active">Theorem publication time:</label></p>
+            <p style="margin-left: 20px;">{{ row.publish|date:'Y-m-d H:m:s' }}</p>
+        </div>
+    <div class="middle-01">
+          <p><label style="margin-top: 40px;" class="active">Description of the theorem:</label></p>
+           <p >{{ row.exp }}</p>
+    </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h1>You haven't published a theorem.</h1>
+    {% endif %}
+
+<script>
+    $(document).ready(function(){
+        $("#post_description").click(function(){
+            function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                    var csrftoken = getCookie('csrftoken');
+                    function csrfSafeMethod(method) {
+                        // these HTTP methods do not require CSRF protection
+                        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                    }
+                    $.ajaxSetup({
+                        crossDomain: false, // obviates need for sameOrigin test
+                        beforeSend: function(xhr, settings) {
+                            if (!csrfSafeMethod(settings.type)) {
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            }
+                        }
+                    });
+         var description=$("#edit_description").val();
+         $.post("/description/",{description:description},
+         function () {
+             alert("success");
+         });
+    })
+        $("#post_nickname").click(function(){
+            function getCookie(name) {
+                        var cookieValue = null;
+                        if (document.cookie && document.cookie != '') {
+                            var cookies = document.cookie.split(';');
+                            for (var i = 0; i < cookies.length; i++) {
+                                var cookie = jQuery.trim(cookies[i]);
+                                // Does this cookie string begin with the name we want?
+                                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                    break;
+                                }
+                            }
+                        }
+                        return cookieValue;
+                    }
+                    var csrftoken = getCookie('csrftoken');
+                    function csrfSafeMethod(method) {
+                        // these HTTP methods do not require CSRF protection
+                        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                    }
+                    $.ajaxSetup({
+                        crossDomain: false, // obviates need for sameOrigin test
+                        beforeSend: function(xhr, settings) {
+                            if (!csrfSafeMethod(settings.type)) {
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            }
+                        }
+                    });
+         var nickname=$("#edit_nickname").val();
+         $.post("/nickname/",{nickname:nickname},
+         function () {
+             alert("success");
+         });
+    })
+    });
+
+</script>
+
+{% endblock %}
+

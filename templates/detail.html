@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% block title %}
+    Theorem for details
+{% endblock %}
+{% block style%}
+     .active{
+    color:#5bc0de;
+    font-size:20px;}
+
+
+ .left-01 {
+           float: left;
+           background-color:yellow;
+           width: 200px;
+           height: 200px;
+       }
+       .right-01 {
+           float: right;
+           background-color: wheat;
+           width: 200px;
+           height: 200px;
+       }
+       .middle-01 {
+           margin: 20px 200px 0 150px;
+           background-color: #fff9ca;
+           height: 200px;
+       }
+{% endblock %}
+{% block content %}
+{% if obj %}
+
+
+    <div>
+    <div class="left-01">
+
+                 <p style="margin-top: 40px;"><label class="active">Theorem:</label>{{ obj.name }}</p>
+    </div>
+        <div class="right-01">
+  <p style="margin-top:40px;margin-left: 20px;"><label class="active">Theorem sharer:</label></p>
+            <p style="margin-left: 60px;">{{ obj.user.username }}</p>
+        </div>
+    <div class="middle-01">
+          <p><label style="margin-top: 40px;" class="active">Theorem description:</label></p>
+           <p >{{ obj.exp }}</p>
+        <p><label style="margin-top: 40px;" class="active">Theorem reference:</label></p>
+           <p >{{ obj.ref }}</p>
+          <p><label style="margin-top:40px;" class="active">Theorem publication time:</label>{{ obj.publish|date:'Y-m-d H:m:s' }}</p>
+<div class="content-wrap-comment">
+    <div id="comment"></div>
+    <h2 class="comment-add">add a comment:</h2>
+    <form class="comment-form" id="jsStayForm">
+      <div class="form-group">
+        <label class="name">name: </label>
+        <input name="name" type="text" class="form-name" id="js-name" placeholder="不超过20个字">
+      </div>
+      <div class="form-group">
+        <label class="comment">comment:</label>
+        <textarea name="content" class="form-control" id="js-content" rows="5" placeholder="不超过300个字"></textarea>
+      </div>
+        <input name="wlibrary" type="hidden" id="js-name" value="{{ obj.id }}">
+        <p class="error company-tips" id="jsCompanyTips"></p>
+        <button class="btn" type="button" id="jsStayBtn" value="发表">发表</button>
+    </form>
+    <div class="#">
+    <h3 class="comment-list-title">共 <span>{{ comment_nums }}</span> 条评论</h3>
+    <ul class="comment-list">
+        {% for comment in comments %}
+            <li class="comment-item">
+            <hr class="the-line"  />
+                <span class="nickname">{{ comment.name }} - </span>
+                <time class="submit-date"
+                      datetime="{{ comment.create_time }}">{{ comment.create_time|date:"Y/m/d   h:m" }}</time>
+                <p class="floor">{{ forloop.counter }} #  </p>
+                <div style="word-wrap: break-word">
+                        {{ comment.content }}
+                </div>
+            </li>
+        {% empty %}
+            No comments now.
+        {% endfor %}
+    </ul>
+    </div>
+</div>
+
+    </div>
+    </div>
+
+    {% else %}
+    <h1>The theorem doesn't exist.</h1>
+    {% endif %}
+
+
+
+{% endblock %}
+{% block script %}
+
+<script>
+
+    $(function(){
+
+        $('#jsStayBtn').on('click', function(){
+
+
+
+            $.ajax({
+
+                cache: false,
+
+                type: "POST",
+
+                url:"/add_comment/",
+
+                data:$('#jsStayForm').serialize(),
+
+                dateType:"json",
+
+                async: true,
+
+                beforeSend:function(xhr, settings){
+
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+
+            },
+
+                success: function(data) {
+
+                    if(data.status == 'success'){
+
+                        alert("提交成功");
+
+                         window.location.reload();//刷新当前页面.
+
+                    }else if(data.status == 'fail'){
+
+
+
+                        alert("Comment is error, please comment again.");
+
+                    }
+
+                },
+
+            });
+
+        });
+
+    })
+
+
+
+</script>
+
+{% endblock %}

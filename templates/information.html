@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block style %}
+.active{
+
+
+    color: #5bc0de
+    }
+
+{% endblock %}
+
+
+{% block content %}
+    <center class="active">
+    <h1 class="active" style="font-size: 60px;">信息管理：</h1>
+        <div>
+                   <button class="infs" style="font-size: 20px;background-color: #d43f3a;color: #5bc0de;">基本信息</button>
+                    <button class="pwd" style="font-size: 20px;background-color: #FFEEC2;color: #5bc0de;">密码管理</button>
+
+
+        </div>
+        <form action="/information/" method="post" class="inf">
+            {% csrf_token %}
+        <div>          <input type="text" style="display: none" name="u-id" value="{{ obj.id }}">
+</div>
+        <div>
+
+        <label style="margin-left: -120px;">用户名：</label>
+    </div>
+    <div>
+
+        <input type="text" name="u-name" value="{{ obj.username }}">
+    </div>
+
+    <div>
+
+        <label style="margin-left: -130px;">昵称：</label>
+    </div>
+    <div>
+
+        <input type="text" name="r-name" value="{{ obj.realname }}">
+    </div>
+            <div>
+
+        <label style="margin-left: -130px;">邮箱：</label>
+    </div>
+    <div>
+
+        <input type="text" name="email" value="{{ obj.email }}">
+    </div>
+            <div>{{ error }}</div>
+    <div>
+        <input class="change" type="submit" style="background-color: #FFEEC2;color: #5bc0de; margin-top: 20px; " value="确认修改">
+
+    </div>
+              </form>
+    </center>
+
+
+
+
+
+
+{% endblock %}
+{% block script %}
+    <script>
+$('.infs').click(function(){
+    location.href='/information/'
+    });
+    $('.pwd').click(function(){
+    location.href='/pwd/'
+    })
+
+</script>
+{% endblock %}

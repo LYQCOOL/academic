@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+    relationship
+{% endblock %}
+{% block style %}
+    .active{
+    color: #5bc0de;font-size: 25px;
+    }
+{% endblock %}
+{% block content %}
+<center>
+    <h1 style="color: #5bc0de;font-weight: 600;">relationship</h1>
+</center>
+<div style="margin-top: 10px;" class="active;">
+<div style="margin-left:50px;">
+    <div>
+    <label>Theorem 1:</label></div>
+    <label for="">{{ t1 }}</label>
+</div>
+<div style="margin-left:50px;">
+    <div>
+    <label>Theorem 2:</label></div>
+
+    <label for="">{{ t2 }}</label>
+</div>
+    <div style="margin-left:50px;">
+    <div>
+    <label>Relationship：</label></div>
+
+    <label for="">{{ l_name_r }}</label>
+    </div>
+    <div style="margin-left:50px;">
+        <label>Description of relationship：</label>
+    <label for="">{{ l_name_exp }}</label>
+    </div>
+<div>
+</div>
+    <div style="margin-left:50px;">
+    <div>
+    <label>Theorem sharer：</label>
+
+    <label for="">{{ username }}</label>
+    </div>
+</div>
+<div style="margin-left:50px;">
+    <div>
+    <label>Reference of theorem relation：</label>
+
+    <label for="">{{ ref }}</label>
+    </div>
+</div>
+</div>
+{% endblock %}

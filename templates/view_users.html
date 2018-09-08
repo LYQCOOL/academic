@@ -1,0 +1,229 @@
+{% extends 'base.html' %}
+{% block title %}
+    Theorem
+{% endblock %}
+{% block style %}
+     .active{
+    color:#5bc0de;
+    font-size:20px;}
+
+    .left-01 {
+           float: left;
+           background-color:yellow;
+           width: 200px;
+           height: 200px;
+       }
+       .right-01 {
+           float: right;
+           background-color: wheat;
+           width: 200px;
+           height: 200px;
+       }
+       .middle-01 {
+           margin: 20px 200px 0 150px;
+           background-color: #fff9ca;
+           height: 200px;
+       }
+{% endblock %}
+{% block  content%}
+    <center>
+
+          <input id="share" type="text" style="margin-top: 20px;width: 350px;height:40px;border: double dodgerblue" placeholder="Please enter the name of the distributor"><input style="color: #5bc0de;margin-left: 10px;background-color: #FFEEC2;width: 60px;height: 40px;font-size: 18px;" class="sousuo" type="button" value="Search">
+      </center>
+<div class="haha" id="theorem">
+{#     <div class="dingli" style="width:100px;height:100px;border:1px solid red;border-radius:50px;line-height:100px;text-align:center;background-color: #FFEEC2;color: #5bc0de">#}
+{#    </div>#}
+</div>
+
+{% endblock %}
+{% block script %}
+<script>
+$.ajaxSetup({
+             beforeSend:function (xhr,settings) {
+                 xhr.setRequestHeader('X-CSRFtoken',$.cookie('csrftoken'));
+
+             }
+         });
+$("#share").bind("input propertychange",function(event){
+     if ($(this).val() == ''){
+        alert('Search content cannot be empty, Please enter sharer.');
+    }
+    else{
+ $.ajax({
+       url:'/users/',
+       data:{'content':$(this).val()},
+       type:'POST',
+       dataType:'JSON',
+       success:function (obj) {
+
+                      if (obj.status)
+                     {
+
+                         var where_in=document.getElementById('theorem');
+                         where_in.innerHTML = '';
+                         if (obj.relations){
+                             console.log('True');
+                         for(var i = 0;i < $.parseJSON(obj['data']).length;i=i+1){
+                             var sp=document.createElement("span");
+                             var myElement1 = document.createElement("div");
+                             var a1=document.createElement('a');
+                             var myElement2 = document.createElement("div");
+                             var a2=document.createElement('a');
+                             a1.href = $.parseJSON(obj['data'])[i];
+                             a1.innerText = $.parseJSON(obj['data'])[i];
+                             a2.href = $.parseJSON(obj['data2'])[i];
+                             a1.target='_blank';
+                             a2.target='_blank';
+                             a2.innerText = $.parseJSON(obj['data2'])[i];
+                             if ($.parseJSON(obj['type'])[i] == 1){
+                              sp.innerText='<=';}
+                              else if ($.parseJSON(obj['type'])[i] == 2){
+                              sp.innerText='>=';}
+                              else if ($.parseJSON(obj['type'])[i] == 3){
+                              sp.innerText='|';}
+                              else{
+                              sp.innerText='===';}
+                             sp.style="color:blue;size:30px;margin-left:10px;margin-right:10px;";
+                             sp.title=$.parseJSON(obj['exp'])[i];
+                             myElement1.style="width:100px;height:100px;border:1px solid red;border-radius:50px;line-height:100px;text-align:center;background-color: #FFEEC2;color: #5bc0de;margin-left:20px;margin-top:10px;display:inline-block;";
+                             myElement2.style="width:100px;height:100px;border:1px solid red;border-radius:50px;line-height:100px;text-align:center;background-color: #FFEEC2;color: #5bc0de;margin-top:10px;display:inline-block;";
+
+                             myElement1.appendChild(a1);
+                               myElement2.appendChild(a2);
+{#                             myElement.style.position = "absolute";#}
+                            //添加到document.body
+{#                             var child=myElement.create_element('a');#}
+{#                             child.innerText=$.parseJSON(obj['data'])[i];#}
+                             document.getElementById('theorem').appendChild(myElement1);
+                             document.getElementById('theorem').appendChild(sp);
+                             document.getElementById('theorem').appendChild(myElement2);
+{#                            document.body.appendChild(myElement);#}
+{#                         $('.haha').append('<div>').text($.parseJSON(obj['data'])[i]);#}
+                         }
+                     }
+                         else {
+                             console.log('False');
+                               for(i = 0;i < $.parseJSON(obj['data']).length;i=i+1){
+                             var myElement = document.createElement("div");
+                             var a=document.createElement('a');
+                             a.href = $.parseJSON(obj['data'])[i];
+                             a.innerText = $.parseJSON(obj['data'])[i];
+{#                            myElement.style.left = '100px';#}
+{#                            myElement.style.top = "300px";#}
+                             myElement.style="width:100px;height:100px;border:1px solid red;border-radius:50px;line-height:100px;text-align:center;background-color: #FFEEC2;color: #5bc0de;margin-left:20px;margin-top:10px;display:inline-block;";
+                             myElement.appendChild(a);
+{#                             myElement.style.position = "absolute";#}
+                            //添加到document.body
+{#                             var child=myElement.create_element('a');#}
+{#                             child.innerText=$.parseJSON(obj['data'])[i];#}
+                             document.getElementById('theorem').appendChild(myElement);
+{#                            document.body.appendChild(myElement);#}
+{#                         $('.haha').append('<div>').text($.parseJSON(obj['data'])[i]);#}
+                         }
+                         }
+                     }
+                     else {
+
+
+                     }
+
+                 }
+             })
+
+    }
+});
+
+$('.sousuo').click(function () {
+    if ($(this).prev().val() == ''){
+        alert('Search content cannot be empty,Please enter sharer .');
+    }
+    else{
+ $.ajax({
+       url:'/users/',
+       data:{'content':$(this).prev().val()},
+       type:'POST',
+       dataType:'JSON',
+       success:function (obj) {
+
+                      if (obj.status)
+                     {
+                         alert('搜索成功！！！');
+                         var where_in=document.getElementById('theorem');
+                         where_in.innerHTML = '';
+                         if (obj.relations){
+                             console.log('True');
+                         for(var i = 0;i < $.parseJSON(obj['data']).length;i=i+1){
+                             var sp=document.createElement("span");
+                             var myElement1 = document.createElement("div");
+                             var a1=document.createElement('a');
+                             var myElement2 = document.createElement("div");
+                             var a2=document.createElement('a');
+                             a1.href = $.parseJSON(obj['data'])[i];
+                             a1.innerText = $.parseJSON(obj['data'])[i];
+                             a2.href = $.parseJSON(obj['data2'])[i];
+                             a1.target='_blank';
+                             a2.target='_blank';
+                             a2.innerText = $.parseJSON(obj['data2'])[i];
+                             if ($.parseJSON(obj['type'])[i] == 1){
+                              sp.innerText='<=';}
+                              else if ($.parseJSON(obj['type'])[i] == 2){
+                              sp.innerText='>=';}
+                              else if ($.parseJSON(obj['type'])[i] == 3){
+                              sp.innerText='|';}
+                              else{
+                              sp.innerText='===';}
+                             sp.style="color:blue;size:30px;margin-left:10px;margin-right:10px;";
+                             sp.title=$.parseJSON(obj['exp'])[i];
+                             myElement1.style="width:100px;height:100px;border:1px solid red;border-radius:50px;line-height:100px;text-align:center;background-color: #FFEEC2;color: #5bc0de;margin-left:20px;margin-top:10px;display:inline-block;";
+                             myElement2.style="width:100px;height:100px;border:1px solid red;border-radius:50px;line-height:100px;text-align:center;background-color: #FFEEC2;color: #5bc0de;margin-top:10px;display:inline-block;";
+
+                             myElement1.appendChild(a1);
+                               myElement2.appendChild(a2);
+{#                             myElement.style.position = "absolute";#}
+                            //添加到document.body
+{#                             var child=myElement.create_element('a');#}
+{#                             child.innerText=$.parseJSON(obj['data'])[i];#}
+                             document.getElementById('theorem').appendChild(myElement1);
+                             document.getElementById('theorem').appendChild(sp);
+                             document.getElementById('theorem').appendChild(myElement2);
+{#                            document.body.appendChild(myElement);#}
+{#                         $('.haha').append('<div>').text($.parseJSON(obj['data'])[i]);#}
+                         }
+                     }
+                         else {
+                             console.log('False');
+                               for(i = 0;i < $.parseJSON(obj['data']).length;i=i+1){
+                             var myElement = document.createElement("div");
+                             var a=document.createElement('a');
+                             a.href = $.parseJSON(obj['data'])[i];
+                             a.innerText = $.parseJSON(obj['data'])[i];
+{#                            myElement.style.left = '100px';#}
+{#                            myElement.style.top = "300px";#}
+                             myElement.style="width:100px;height:100px;border:1px solid red;border-radius:50px;line-height:100px;text-align:center;background-color: #FFEEC2;color: #5bc0de;margin-left:20px;margin-top:10px;display:inline-block;";
+                             myElement.appendChild(a);
+{#                             myElement.style.position = "absolute";#}
+                            //添加到document.body
+{#                             var child=myElement.create_element('a');#}
+{#                             child.innerText=$.parseJSON(obj['data'])[i];#}
+                             document.getElementById('theorem').appendChild(myElement);
+{#                            document.body.appendChild(myElement);#}
+{#                         $('.haha').append('<div>').text($.parseJSON(obj['data'])[i]);#}
+                         }
+                         }
+                     }
+                     else {
+
+                          alert(obj['error']);
+                     }
+
+
+                 }
+             })
+
+
+
+    }
+
+})
+</script>
+{% endblock %}

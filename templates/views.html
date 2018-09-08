@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block title %}
+    Search theorems
+{% endblock %}
+{% block style %}
+     .active{
+    color:#5bc0de;
+    font-size:20px;}
+
+    .left-01 {
+           float: left;
+           background-color:yellow;
+           width: 200px;
+           height: 200px;
+       }
+       .right-01 {
+           float: right;
+           background-color: wheat;
+           width: 200px;
+           height: 200px;
+       }
+       .middle-01 {
+           margin: 20px 200px 0 150px;
+           background-color: #fff9ca;
+           height: 200px;
+       }
+{% endblock %}
+{% block  content%}
+<script src="https://cdn.bootcss.com/vue/2.5.17-beta.0/vue.min.js"></script>
+    <center>
+
+          <input id="share" type="text" style="margin-top: 20px;width: 350px;height:40px;border: double dodgerblue" placeholder="Please enter the name of the theorem">
+        <input style="color: #5bc0de;margin-left: 10px;background-color: #FFEEC2;width: 60px;height: 40px;font-size: 18px;" class="sousuo" type="button" value="Search">
+        <input id='huitu' style="color: #5bc0de;margin-left: 10px;background-color: #FFEEC2;width: 60px;height: 40px;font-size: 18px;" class="huitu" type="button" value="Form the diagram">
+      </center>
+<div class="haha" id="theorem">
+<div class="data">
+    <ul>
+        <li v-for="(name ,index) in theorems">
+            <input type="checkbox" v-model="checkList" :id="'a'+index" :value="name">
+            <label :for="'a'+index"><a :href="'/views/'+name" v-text="name"></a></label>
+        </li>
+    </ul>
+</div>
+    <div class="img-wrap" style="width:600px;height:400px"><img src="" alt="" id="theoremImg" style="width:100%;height:100%"></div>
+    <ul>
+        <li v-for="(item, index) in relation">
+            <a :href="item[0]" v-text="item[0]"></a>
+            <a :href='"/relation/?id="+item[3]' v-text="item[2]"></a>
+            <a :href="item[1]" v-text="item[1]"></a>
+        </li>
+    </ul>
+</div>
+
+{% endblock %}
+{% block script %}
+{% for each in node_list %}
+
+{% endfor %}
+<script>
+localStorage.setItem('checkList',JSON.stringify([]))
+var app = new Vue({
+    el:'#theorem',
+    data(){
+        return {
+            theorems: [],
+            checkList : [],
+            relation: []
+        }
+    },
+    watch:{
+        checkList(val){
+            let list = JSON.parse(localStorage.getItem('checkList'))
+            if(val.length===0){
+                <!--alert('required field ')-->
+                list = []
+            }
+            for(let a in val){
+                if(list.indexOf(val[a])<0){ // there are no val in the list.
+                    list.push(val[a])
+                }else{ //delete the val in the list.
+                    for(let b in list){
+                        if(val.indexOf(list[b])<0){
+                            list.splice(b ,1)
+                        }
+                    }
+                }
+            }
+            localStorage.setItem('checkList',JSON.stringify(list))
+        }
+    }
+})
+$.ajaxSetup({
+             beforeSend:function (xhr,settings) {
+                 xhr.setRequestHeader('X-CSRFtoken',$.cookie('csrftoken'));
+
+             }
+         });
+$("#huitu").click(function(){
+    let data = localStorage.getItem('checkList')
+    $.ajax({
+        url: "/draw_image/",
+        data: { 'data': data },
+        type: 'POST',
+        dataType: 'JSON',
+        success: function(res){
+            console.log(res)
+            $("#theoremImg").attr("src", "data:image/png;base64,"+ res.data.image)
+            app.relation = res.data.relation
+        },
+        error: function(err){
+            console.log(err)
+        }
+    })
+})
+$('.sousuo').click(function ()
+ {
+    if ($(this).prev().val() == '')
+    {
+        alert('Search content cannot be empty!!!Please enter the searched theorem name！！！');
+    }
+    else{
+     $.ajax({
+           url:'/views/',
+           data:{'content':$(this).prev().val()},
+           type:'POST',
+           dataType:'JSON',
+           success:function (res) {
+                if(res.successful){
+                    console.log(res.data)
+                    app.theorems = res.data
+                }
+           },
+           error:function(err){
+                console.log(err)
+           }
+           })
+    }
+
+})
+</script>
+{% endblock %}

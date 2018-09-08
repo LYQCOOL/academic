@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+    add theorem
+{% endblock %}
+{% block style %}
+    .active{
+    color: #5bc0de;font-size: 25px;
+    }
+{% endblock %}
+{% block content %}
+<center><h1 style="color: #5bc0de;font-weight: 600;">sharing theorem </h1></center>
+<form action="/add_theorem/" method="post" class="active">
+{% csrf_token %}
+<div style="margin-top: 10px;" class="active;">
+<div style="margin-left:50px;">
+    <div>
+    <label>Theorem name：</label></div>
+    <input type="text" placeholder="Please enter the name of the theorem" style="border: double dodger blue;width:95%;color: black;font-size: 15px;height: 40px;" name="t_name" class="title">
+</div>
+    <div style="margin-left:50px;">
+    <div>
+    <label>Theorem for reference:</label></div>
+    <input type="text" placeholder="Please enter the theorem reference" style="border: double dodger blue;width:95%;color: black;font-size: 15px;height: 40px;" name="t_ref" class="title">
+</div>
+    <div style="margin-left:50px;">
+    <div>
+    <label>MCDC：</label></div>
+    <input type="text" placeholder="MCDC1" style="border: double dodger blue;width:47%;color: black;font-size: 15px;height: 40px;" name="mcdc1" class="title">-
+<input type="text" placeholder="MCDC2" style="border: double dodger blue;width:47%;color: black;font-size: 15px;height: 40px;" name="mcdc2" class="title">
+    </div>
+    <div style="margin-left:50px;">
+    <div >
+        <label>Interpretation of the theorem:</label></div>
+     <textarea style="width:95%;height: 200px;border: double dodger blue;color: black;font-size: 15px;" placeholder="Please enter the theorem to explain" name="t_exp" class="t_exp"></textarea>
+    </div>
+<div style="margin-left: 1100px;">
+    <input style="background-color: #FFEEC2;" type="submit" value="submit" class="tijiao">&emsp;&emsp;&nbsp;&nbsp;
+     <input style="background-color: #FFEEC2;" type="button" value="cancel" class="cancel">
+</div>
+</div>
+</form>
+{% endblock %}
+{% block script %}
+<script>
+$('.cancel').click(function () {
+$('.title').val('');
+$('.t_exp').val('');
+
+
+})
+</script>
+    {{ error|safe }}
+{% endblock %}
